@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+  @layer base {
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Outfit", sans-serif;
+      background: #131313;
+    }
+
+    .spinner {
+      display: grid;
+      place-self: center;
+      min-height: 80vh;
+    }
+    .spin {
+      width: 65px;
+      height: 65px;
+      place-self: center;
+      border: 5px solid #bdbdbd;
+      border-top-color: #4500c6;
+      border-radius: 50%;
+      animation: rotate 2s infinite;
+    }
+    @keyframes rotate {
+      100%{
+        transform: rotate(360deg);
+      }
+    }
+  }
