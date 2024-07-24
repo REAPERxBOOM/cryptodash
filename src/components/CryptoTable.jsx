@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { GrFormPrevious } from "react-icons/gr";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const CryptoTable = ({ displayedCoins, searchResults, currency }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -95,12 +96,32 @@ const CryptoTable = ({ displayedCoins, searchResults, currency }) => {
   // NAVIGATE TO COIN PAGE WHEN ANY COIN IS CLICKED.
   const handleCoinPage = (id) => {
     navigate(`/coin/${id}`);
-  }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
 
   return (
     <>
-      <div className="relative overflow-auto">
-        <table className="w-full sm:overflow-x-auto md:overflow-x-auto text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <motion.div
+        className="relative overflow-auto"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
+        <table className="w-full max-w-[1600px] mx-auto sm:overflow-x-auto md:overflow-x-auto text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-sm text-slate-300 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr className="border-b-[1px] border-slate-300">
               <th scope="col" className="px-6 py-3">
@@ -129,7 +150,8 @@ const CryptoTable = ({ displayedCoins, searchResults, currency }) => {
           <tbody>
             {currentItems.slice(0, 10).map((item, idx) => {
               return (
-                <tr
+                <motion.tr
+                  variants={itemVariants}
                   key={idx}
                   className="text-slate-300 border-b border-zinc-800 cursor-pointer"
                   onClick={() => handleCoinPage(item.id)}
@@ -157,8 +179,7 @@ const CryptoTable = ({ displayedCoins, searchResults, currency }) => {
                     ) : (
                       <span className="text-[0.7rem] me-1">&#9660;</span>
                     )}
-                    {Math.floor(item.price_change_percentage_24h * 100) / 100}
-                    %
+                    {Math.floor(item.price_change_percentage_24h * 100) / 100}%
                   </td>
                   <td className="px-6 py-4">{item.market_cap}</td>
                   <td className="px-6 py-4">{item.total_volume}</td>
@@ -166,7 +187,7 @@ const CryptoTable = ({ displayedCoins, searchResults, currency }) => {
                     {Math.floor(item.circulating_supply * 100) / 100} -{" "}
                     {item.symbol.toUpperCase()}
                   </td>
-                </tr>
+                </motion.tr>
               );
             })}
           </tbody>
@@ -198,7 +219,7 @@ const CryptoTable = ({ displayedCoins, searchResults, currency }) => {
             </button>
           </li>
         </ul>
-      </div>
+      </motion.div>
     </>
   );
 };

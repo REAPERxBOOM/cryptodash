@@ -57,7 +57,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center h-[70px] border-b-[1px] border-zinc-700 w-full">
+      <div className="max-w-[1600px] mx-auto flex justify-between items-center h-[70px] border-b-[1px] border-zinc-700 w-full">
         <Link to={'/'} className="flex items-center">
           <DiTerminal fill="#fff" className="text-2xl md:text-5xl" />
           <p className="text-white text-md md:text-xl">cryptoDash</p>

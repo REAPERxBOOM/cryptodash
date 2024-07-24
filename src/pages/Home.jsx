@@ -6,6 +6,7 @@ import CryptoTable from "../components/CryptoTable";
 import { CoinContext } from "../context/CoinContext";
 import FAQs from "./FAQs";
 import { useScroll } from "../context/ScrollContext";
+import { motion } from "framer-motion";
 
 const Home = () => {
   const { allCoin, currency } = useContext(CoinContext);
@@ -13,10 +14,11 @@ const Home = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [displayedCoins, setDisplayedCoins] = useState([]);
   const { faqsRef } = useScroll();
+  const [animationComplete, setAnimationComplete] = useState(false);
 
   useEffect(() => {
     setDisplayedCoins(allCoin);
-  }, [allCoin])
+  }, [allCoin]);
 
   useEffect(() => {
     if (searchInput) {
@@ -24,7 +26,7 @@ const Home = () => {
         coin.name.toLowerCase().includes(searchInput.toLowerCase())
       );
       // console.log(results)
-      setSearchResults(results); 
+      setSearchResults(results);
       setDisplayedCoins(results);
     } else {
       setSearchResults([]);
@@ -43,17 +45,38 @@ const Home = () => {
     setSearchResults([]);
   };
 
+  const fadeInVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 1 } },
+  };
+
+  const handleAnimationComplete = () => {
+    setAnimationComplete(true);
+  };
+
   return (
     <Layout>
       <div className="min-h-screen flex flex-col">
         <div className="flex flex-col mb-8">
-          <h1 className="text-white text-5xl md:text-6xl lg:text-7xl text-center mt-12 mb-8">
+          <motion.h1
+            className="text-white text-5xl md:text-6xl lg:text-7xl text-center mt-12 mb-8"
+            initial="hidden"
+            animate="visible"
+            variants={fadeInVariants}
+            onAnimationComplete={handleAnimationComplete}
+          >
             Crypto Marketplace
-          </h1>
-          <p className="text-white text-md text-center max-w-[350px] m-auto">
+          </motion.h1>
+          <motion.p
+            className="text-white text-md text-center max-w-[350px] m-auto"
+            initial="hidden"
+            animate="visible"
+            variants={fadeInVariants}
+            onAnimationComplete={handleAnimationComplete}
+          >
             Welcome to Crypto Marketplace. Sign up to know more about your
             favourite crypto.
-          </p>
+          </motion.p>
         </div>
         <div className="mb-5 mx-auto min-w-[300px] sm:min-w-[320px] md:min-w-[420px] relative">
           <input
@@ -67,22 +90,30 @@ const Home = () => {
           {searchResults.length > 0 && searchInput ? (
             <div className="absolute z-10 w-full border border-slate-300 rounded-lg mt-1 max-h-60 overflow-y-auto">
               {searchResults.map((coin) => {
-                return <div
-                  key={coin?.id}
-                  className="p-2 cursor-pointer text-white hover:bg-zinc-800 transition-all"
-                  onClick={() => handleSearchResultClick(coin)}
-                >
-                  {coin?.name}
-                </div>;
+                return (
+                  <div
+                    key={coin?.id}
+                    className="p-2 cursor-pointer text-white hover:bg-zinc-800 transition-all"
+                    onClick={() => handleSearchResultClick(coin)}
+                  >
+                    {coin?.name}
+                  </div>
+                );
               })}
             </div>
           ) : (
-             ""
+            ""
           )}
         </div>
-        <CryptoTable displayedCoins={displayedCoins} searchResults={searchResults} currency={currency} />
+        {animationComplete && (
+          <CryptoTable
+            displayedCoins={displayedCoins}
+            searchResults={searchResults}
+            currency={currency}
+          />
+        )}
         <div ref={faqsRef}>
-          <FAQs/>
+          <FAQs />
         </div>
       </div>
     </Layout>
