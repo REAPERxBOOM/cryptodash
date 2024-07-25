@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Home from "./pages/Home"
 import Coin from "./pages/Coin"
-import FAQs from "./pages/FAQs"
 import CoinContextProvider from "./context/CoinContext"
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import { ScrollProvider } from "./context/ScrollContext"
@@ -16,7 +15,6 @@ function App() {
         <Routes>
           <Route path={'/'} element={<Home/>} />
           <Route path={'/coin/:coinId'} element={<Coin/>}/>
-          <Route path={'/faqs'} element={<FAQs/>}/>
         </Routes>
       </BrowserRouter>
       </ScrollProvider>
