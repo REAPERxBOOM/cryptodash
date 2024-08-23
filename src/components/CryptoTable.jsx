@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GrFormPrevious } from "react-icons/gr";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
@@ -115,111 +115,112 @@ const CryptoTable = ({ displayedCoins, searchResults, currency }) => {
 
   return (
     <>
-      <motion.div
-        className="relative overflow-auto"
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-      >
-        <table className="w-full max-w-[1600px] mx-auto sm:overflow-x-auto md:overflow-x-auto text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-sm text-slate-300 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr className="border-b-[1px] border-slate-300">
-              <th scope="col" className="px-6 py-3">
-                #
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Name
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Price
-              </th>
-              <th scope="col" className="px-6 py-3 text-right ">
-                24h %
-              </th>
-              <th scope="col" className="px-6 py-3 ">
-                Market Cap
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Total Volume
-              </th>
-              <th scope="col" className="px-6 py-3 text-right">
-                Circulating Supply
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItems.slice(0, 10).map((item, idx) => {
-              return (
-                <motion.tr
-                  variants={itemVariants}
-                  key={idx}
-                  className="text-slate-300 border-b border-zinc-800 cursor-pointer"
-                  onClick={() => handleCoinPage(item.id)}
-                >
-                  <td scope="row" className="px-6 py-4">
-                    {item.market_cap_rank}
-                  </td>
-                  <td className="px-6 py-4 flex items-center gap-2">
-                    <img src={item.image} alt="" className="max-w-[25px]" />
-                    {item.name} - {item.symbol.toUpperCase()}
-                  </td>
-                  <td className="px-6 py-4 ">
-                    {currency.symbol}
-                    {item.current_price.toLocaleString()}
-                  </td>
-                  <td
-                    className={`px-6 py-4 text-right ${
-                      item.price_change_percentage_24h > 0
-                        ? "text-green-300/75"
-                        : "text-red-300/75"
-                    }`}
+        <motion.div
+          className="relative overflow-auto"
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+        >
+          <table className="w-full max-w-[1600px] mx-auto sm:overflow-x-auto md:overflow-x-auto text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead className="text-sm text-slate-300 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr className="border-b-[1px] border-slate-300">
+                <th scope="col" className="px-6 py-3">
+                  #
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Name
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Price
+                </th>
+                <th scope="col" className="px-6 py-3 text-right ">
+                  24h %
+                </th>
+                <th scope="col" className="px-6 py-3 ">
+                  Market Cap
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Total Volume
+                </th>
+                <th scope="col" className="px-6 py-3 text-right">
+                  Circulating Supply
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentItems.slice(0, 10).map((item, idx) => {
+                return (
+                  <motion.tr
+                    variants={itemVariants}
+                    key={idx}
+                    className="text-slate-300 border-b border-zinc-800 cursor-pointer"
+                    onClick={() => handleCoinPage(item.id)}
                   >
-                    {item.price_change_percentage_24h > 0 ? (
-                      <span className="text-[0.7rem] me-1">&#9650;</span>
-                    ) : (
-                      <span className="text-[0.7rem] me-1">&#9660;</span>
-                    )}
-                    {Math.floor(item.price_change_percentage_24h * 100) / 100}%
-                  </td>
-                  <td className="px-6 py-4">{item.market_cap}</td>
-                  <td className="px-6 py-4">{item.total_volume}</td>
-                  <td className="px-6 py-4 text-right">
-                    {Math.floor(item.circulating_supply * 100) / 100} -{" "}
-                    {item.symbol.toUpperCase()}
-                  </td>
-                </motion.tr>
-              );
-            })}
-          </tbody>
-        </table>
-        <ul className="pagination flex justify-center mt-4 text-white">
-          <li
-            className={`page-item me-2 w-[35px] h-[35px] border border-slate-300 rounded-lg ${
-              currentPage !== 1
-                ? "hover:bg-zinc-800 transition-all active:scale-95"
-                : ""
-            }  `}
-          >
-            <button
-              onClick={handlePrevPage}
-              className="page-link w-full h-full flex justify-center items-center"
-              disabled={currentPage === 1}
+                    <td scope="row" className="px-6 py-4">
+                      {item.market_cap_rank}
+                    </td>
+                    <td className="px-6 py-4 flex items-center gap-2">
+                      <img src={item.image} alt="" className="max-w-[25px]" />
+                      {item.name} - {item.symbol.toUpperCase()}
+                    </td>
+                    <td className="px-6 py-4 ">
+                      {currency.symbol}
+                      {item.current_price.toLocaleString()}
+                    </td>
+                    <td
+                      className={`px-6 py-4 text-right ${
+                        item.price_change_percentage_24h > 0
+                          ? "text-green-300/75"
+                          : "text-red-300/75"
+                      }`}
+                    >
+                      {item.price_change_percentage_24h > 0 ? (
+                        <span className="text-[0.7rem] me-1">&#9650;</span>
+                      ) : (
+                        <span className="text-[0.7rem] me-1">&#9660;</span>
+                      )}
+                      {Math.floor(item.price_change_percentage_24h * 100) / 100}
+                      %
+                    </td>
+                    <td className="px-6 py-4">{item.market_cap}</td>
+                    <td className="px-6 py-4">{item.total_volume}</td>
+                    <td className="px-6 py-4 text-right">
+                      {Math.floor(item.circulating_supply * 100) / 100} -{" "}
+                      {item.symbol.toUpperCase()}
+                    </td>
+                  </motion.tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <ul className="pagination flex justify-center mt-4 text-white">
+            <li
+              className={`page-item me-2 w-[35px] h-[35px] border border-slate-300 rounded-lg ${
+                currentPage !== 1
+                  ? "hover:bg-zinc-800 transition-all active:scale-95"
+                  : ""
+              }  `}
             >
-              <GrFormPrevious className="bg-transparent" />
-            </button>
-          </li>
-          {renderPageNumbers}
-          <li className="page-item w-[35px] h-[35px] border border-slate-300 rounded-lg hover:bg-zinc-800 transition-all active:scale-95">
-            <button
-              onClick={handleNextPage}
-              className="page-link w-full h-full flex justify-center items-center"
-              disabled={currentPage === pageNumbers.length}
-            >
-              <MdOutlineNavigateNext className="bg-transparent" />
-            </button>
-          </li>
-        </ul>
-      </motion.div>
+              <button
+                onClick={handlePrevPage}
+                className="page-link w-full h-full flex justify-center items-center"
+                disabled={currentPage === 1}
+              >
+                <GrFormPrevious className="bg-transparent" />
+              </button>
+            </li>
+            {renderPageNumbers}
+            <li className="page-item w-[35px] h-[35px] border border-slate-300 rounded-lg hover:bg-zinc-800 transition-all active:scale-95">
+              <button
+                onClick={handleNextPage}
+                className="page-link w-full h-full flex justify-center items-center"
+                disabled={currentPage === pageNumbers.length}
+              >
+                <MdOutlineNavigateNext className="bg-transparent" />
+              </button>
+            </li>
+          </ul>
+        </motion.div>
     </>
   );
 };

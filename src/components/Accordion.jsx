@@ -8,7 +8,7 @@ const Accordion = () => {
   };
 
   return (
-    <div className="max-w-[800px] mx-auto p-2 border-[1px] border-zinc-500 rounded-lg">
+    <div className="max-w-[800px] mx-auto pt-2 ps-2 pe-2 border-[1px] border-zinc-500 rounded-lg">
       <div className="relative mb-3">
         <h6 className="mb-0">
           <button

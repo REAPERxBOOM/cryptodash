@@ -56,8 +56,8 @@ const Header = () => {
   };
 
   return (
-    <>
-      <div className="max-w-[1600px] mx-auto flex justify-between items-center h-[70px] border-b-[1px] border-zinc-700 w-full">
+    <header className="sticky top-0 left-0 right-0 z-10 bg-[#131313]">
+      <div className="max-w-[1600px] mx-auto flex justify-between items-center h-[70px] px-4 text-white border-b border-zinc-700">
         <Link to={'/'} className="flex items-center">
           <DiTerminal fill="#fff" className="text-2xl md:text-5xl" />
           <p className="text-white text-md md:text-xl">cryptoDash</p>
@@ -96,7 +96,7 @@ const Header = () => {
           </button> */}
         </div>
       </div>
-    </>
+    </header>
   );
 };
 

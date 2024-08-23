@@ -68,7 +68,7 @@ const Coin = () => {
     return (
       <Layout>
         <motion.div
-          className="max-w-[1000px] mt-5 mx-auto flex flex-col justify-center items-center gap-4 min-h-screen"
+          className="max-w-[1000px] relative mt-5 mx-auto flex flex-col gap-4 min-h-screen"
           initial="hidden"
           animate="visible"
           variants={containerVariants}

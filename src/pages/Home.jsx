@@ -1,12 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Layout from "../layout/Layout";
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiX } from "react-icons/fi";
 
 import CryptoTable from "../components/CryptoTable";
 import { CoinContext } from "../context/CoinContext";
 import FAQs from "./FAQs";
 import { useScroll } from "../context/ScrollContext";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { allCoin, currency } = useContext(CoinContext);
@@ -15,6 +16,8 @@ const Home = () => {
   const [displayedCoins, setDisplayedCoins] = useState([]);
   const { faqsRef } = useScroll();
   const [animationComplete, setAnimationComplete] = useState(false);
+  const navigate = useNavigate();
+  const searchRef = useRef(null);
 
   useEffect(() => {
     setDisplayedCoins(allCoin);
@@ -34,6 +37,18 @@ const Home = () => {
     }
   }, [searchInput, allCoin]);
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if(searchRef.current && !searchRef.current.contains(e.target)) {
+        setSearchResults([]);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, []);
+
   const handleSearchInputChange = (e) => {
     // console.log(e.target.value)
     setSearchInput(e.target.value);
@@ -43,6 +58,16 @@ const Home = () => {
     setDisplayedCoins([coin]);
     setSearchInput("");
     setSearchResults([]);
+    navigate(`/coin/${coin.id}`);
+  };
+
+  const handleClearSearch = () => {
+    setSearchInput("");
+    setSearchResults([]);
+  }  
+
+  const handleAnimationComplete = () => {
+    setAnimationComplete(true);
   };
 
   const fadeInVariants = {
@@ -50,13 +75,9 @@ const Home = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 1 } },
   };
 
-  const handleAnimationComplete = () => {
-    setAnimationComplete(true);
-  };
-
   return (
     <Layout>
-      <div className="min-h-screen flex flex-col">
+      <div className="relative top-[70px] flex flex-col">
         <div className="flex flex-col mb-8">
           <motion.h1
             className="text-white text-5xl md:text-6xl lg:text-7xl text-center mt-12 mb-8"
@@ -87,6 +108,12 @@ const Home = () => {
             onChange={handleSearchInputChange}
           />
           <FiSearch className="absolute text-white text-2xl right-2 top-[50%] translate-y-[-50%] bg-[#131313]" />
+          {searchInput && (
+            <FiX
+              className="absolute text-white text-2xl right-8 top-[50%] translate-y-[-50%] cursor-pointer"
+              onClick={handleClearSearch}
+            />
+          )}
           {searchResults.length > 0 && searchInput ? (
             <div className="absolute z-10 w-full border border-slate-300 rounded-lg mt-1 max-h-60 overflow-y-auto">
               {searchResults.map((coin) => {
